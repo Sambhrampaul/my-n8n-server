@@ -1,0 +1,118 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c6c12741-f8bb-46ea-a60f-466292653ccc",
+      "name": "When chat message received",
+      "webhookId": "c14b9591-6df1-4739-bd4d-c361008f5710"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a friendly Water Quality Check assistant. Greet the user and help them determine whether a water source is safe.\n\nCollect these 8 parameters from the user (ask for any that are missing, one clear message listing all of them is fine):\n- pH value (decimal)\n- Turbidity (in NTU)\n- Odor (e.g. \"odorless\" or a description)\n- Fluorides (in mg)\n- Arsenic (in mg)\n- Nitrates (in mg)\n- Temperature (in °C)\n- BOD level (in ppm)\n\nOnce you have all 8 values, evaluate safety using EXACTLY these rules. The water source is SAFE only if ALL of the following hold:\n- pH between 6.5 and 8.5 (inclusive)\n- Turbidity between 0.1 and 0.3 NTU (inclusive)\n- Odor is exactly \"odorless\"\n- Fluorides between 0.5 and 1.5 mg (inclusive)\n- Arsenic between 0 and 10 mg (inclusive)\n- Nitrates between 0 and 50 mg (inclusive)\n- Temperature between 8 and 25 °C (inclusive)\n- BOD between 0 and 5 ppm (inclusive)\n\nIf every condition is met, reply \"Water source is safe\". Otherwise reply \"Water source is not safe\" and clearly list which specific parameters are out of the acceptable range and what the acceptable range is. When the water source is NOT safe, ALWAYS end your reply with an emergency notice telling the user to report this water source immediately by calling the Emergency Water Quality Report Number: [EMERGENCY_NUMBER]. Present it as a clickable number :\n[+91 1800-11-4000]\nso users can call directly. Be concise and helpful."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "a3cb001b-73e5-4f13-94fe-d8d6c68d7bce",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        96,
+        208
+      ],
+      "id": "36262fbb-a4b7-4645-8078-3f68eb67e673",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "X4nTKgCOBiveuAqC",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 5e+89
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        208
+      ],
+      "id": "2932b7e2-ab0f-4c43-8cca-d4785580a1ed",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "0d9ada90-96a3-4b77-a993-d066194a316f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f2356e6f17eba711e1456da0523ace6f49d9757fc292e46ef9b8f00ff6b413ac"
+  },
+  "nodeGroups": [],
+  "id": "sO0nPUmkDPBw7J95",
+  "tags": []
+}
