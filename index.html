@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Assistant</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #f4f7f6; }
+    </style>
+    <!-- n8n Chat Widget Library -->
+    <link href="https://jsdelivr.net" rel="stylesheet" />
+</head>
+<body>
+
+    <script type="module">
+        import { createChat } from 'https://jsdelivr.net';
+
+        createChat({
+            // IMPORTANT: Replace this placeholder with your live n8n Chat Trigger Webhook URL
+            webhookUrl: 'https://YOUR_N8N_INSTANCE_URL/webhook/c14b9591-6df1-4739-bd4d-c36100ff5710',
+            mode: 'fullscreen',
+            showWelcomeScreen: true,
+            title: 'Water Quality Assistant',
+            subtitle: 'Ask me anything about water parameters',
+            initialMessages: [
+                'Hello! I am your friendly Water Quality Check Assistant. How can I help you determine if your water source is safe today?'
+            ]
+        });
+    </script>
+</body>
+</html>
